@@ -1,0 +1,45 @@
+This software installs a clean shutdown to the Venus OS menu system.
+The ShutdownMonitor runs as a service and creates a dbus service with a single
+paramter: /Shutdown. Setting /Shutdown to 1 will trigger a clean OS shutdown.
+
+A shutdown submenu is added to the Settings / General menu.
+A submenu is used to alert the user that a power cycle is needed to restart the GX device.
+
+Note that Cerbo restarts itself after a shutdown so this addition may not be useful
+in all situations.
+
+Setup:
+
+The easiest way to install this or other of my packages is to first install SetupHelper,
+then use its package install tool. Refer to the SetupHelper ReadMe for instructions.
+
+There are two other methods to fetch a package archive.
+
+wget -qO - https://github.com/kwindrem/ShutdownMonitor/archive/current.tar.gz | tar -xzf - -C /data
+
+If not, do the following a computer that does have internet access
+
+click on this link in a web browser:
+https://github.com/kwindrem/ShutdownMonitor/archive/current.tar.gz
+
+rename the resulting .tar.gz file to venus-data.tar.gz
+copy the venus-data.tar.gz to a USB stick,
+put the stick in the Venus device and reboot.
+When Venus boots, it will unarchive the file to /data/TankRepeater-current
+
+Repeat the above for SetupHelper if you haven't done so for another package
+
+When you have the two -current direcotries from either of the above methods,
+run the following commands
+
+rm -rf /data/ShutdownMonitor
+mv /data/ShutdownMonitor-current /data/ShutdownMonitor
+rm -rf /data/ShutdownMonitor
+mv /data/ShutdownMonitor-current /data/ShutdownMonitor
+/data/ShutdownMonitor/setup
+
+You will need root access to the Venus device. Instructions can be found here:
+https://www.victronenergy.com/live/ccgx:root_access
+The root password needs to be reentered following a Venus update.
+Setting up an authorization key (see documentation referenced above) will save time and avoid having to reset the root password after each update.
+

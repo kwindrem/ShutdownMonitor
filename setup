@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# setup Shurdown Monitor mechanism
+# Venus OS provides a restart command but not a shutdown command
+# This modificaiton adds a shutdown command to the Device List / Settings / General menu
+
+# Venus files that need to be updated to activeate this package
+qmlDir=/opt/victronenergy/gui/qml
+pageSettingsGeneralFile="$qmlDir/PageSettingsGeneral.qml"
+pageSettingsShutdownFile="$qmlDir/PageSettingsShutdown.qml"
+
+packageLogFile="/var/log/ShutdownMonitor/current"
+
+#### following lines incorporate SetupHelper utilities into this script
+# Refer to the SetupHelper ReadMe file for details.
+    
+source "/data/SetupHelper/CommonResources"
+
+#### end of lines to include SetupHelper
+
+#### running manually and OK to proceed - prompt for input
+if [ $scriptAction == 'NONE' ] ; then
+    echo
+    echo "The Shutdown Monitor adds a shutdown command"
+    echo " to the Settings / General menu"
+    echo
+    standardActionPrompt
+fi
+
+#### here to do the actual work
+
+if [ $scriptAction == 'INSTALL' ] ; then
+    logMessage "++ Installing ShutdownMonitor"
+
+    updateActiveFile "$pageSettingsGeneralFile"
+    updateActiveFile "$pageSettingsShutdownFile"
+
+    installService $packageName
+
+    if $filesUpdated ; then
+        restartGui=true
+    fi
+fi
+
+# #### uninstalling - check scriptAction again
+# if an install step failed package needs to be removed
+if [ $scriptAction == 'UNINSTALL' ] ; then
+    logMessage "++ Uninstalling ShutdownMonitor"
+
+    restoreActiveFile "$pageSettingsGeneralFile"
+    restoreActiveFile "$pageSettingsShutdownFile"
+    removeService $packageName
+fi
+
+if $filesUpdated ; then
+    restartGui=true
+fi
+
+# thats all folks - SCRIPT EXITS INSIDE THE FUNCTION
+endScript
+
+
