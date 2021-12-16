@@ -1,13 +1,17 @@
 #!/bin/bash
 
+# TODO: add Setting to allow GPIO to trigger shutdown
+#			needs enable so false triggers won't shutdown accidentially
+#			RPI only - needs RpiGpioSetup also
+#
+
+
 # setup Shurdown Monitor mechanism
 # Venus OS provides a restart command but not a shutdown command
 # This modificaiton adds a shutdown command to the Device List / Settings / General menu
 
 # Venus files that need to be updated to activeate this package
 qmlDir=/opt/victronenergy/gui/qml
-pageSettingsGeneralFile="$qmlDir/PageSettingsGeneral.qml"
-pageSettingsShutdownFile="$qmlDir/PageSettingsShutdown.qml"
 
 packageLogFile="/var/log/ShutdownMonitor/current"
 
@@ -32,8 +36,8 @@ fi
 if [ $scriptAction == 'INSTALL' ] ; then
     logMessage "++ Installing ShutdownMonitor"
 
-    updateActiveFile "$pageSettingsGeneralFile"
-    updateActiveFile "$pageSettingsShutdownFile"
+    updateActiveFile "$qmlDir/PageSettingsGeneral.qml"
+    updateActiveFile "$qmlDir/PageSettingsShutdown.qml"
 
     installService $packageName
 
@@ -47,8 +51,8 @@ fi
 if [ $scriptAction == 'UNINSTALL' ] ; then
     logMessage "++ Uninstalling ShutdownMonitor"
 
-    restoreActiveFile "$pageSettingsGeneralFile"
-    restoreActiveFile "$pageSettingsShutdownFile"
+    restoreActiveFile "$qmlDir/PageSettingsGeneral.qml"
+    restoreActiveFile "$qmlDir/PageSettingsShutdown.qml"
     removeService $packageName
 fi
 

@@ -1,0 +1,3 @@
+v2.0
+	add GPIO shutdown pin - requires RpiGpioSetup v3.4 or later and only works on Raspberry PI 2/3/4
+	add support for SetupHelper v4

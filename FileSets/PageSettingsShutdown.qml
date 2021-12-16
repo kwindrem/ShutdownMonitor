@@ -9,6 +9,8 @@ MbPage
 	id: root
 	title: qsTr("System Shutdown")
     VBusItem { id: shutdownItem; bind: Utils.path("com.victronenergy.shutdown", "/Shutdown") }
+    VBusItem { id: externalShutdown; bind: Utils.path("com.victronenergy.shutdown", "/ExtShutdownPresent") }
+    property bool externalShutdownPresent: externalShutdown.valid && externalShutdown.value == 1
 
     model: VisualItemModel
     {
@@ -22,10 +24,25 @@ MbPage
         }
         MbItemText
         {
-            text: qsTr("No shutdown dBus parameter - check ShutdownMonitor service")
+            text: qsTr("ShutdownMonitor not running")
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignLeft
             show: !shutdownItem.valid
+        }
+        MbSwitch
+        {
+            id: externalShutdownSwitch
+            name: qsTr("Enable shutdown pin on Raspberry PI")
+            bind: Utils.path("com.victronenergy.settings", "/Settings/ShutdownMonitor/ExternalSwitch")
+            writeAccessLevel: User.AccessInstaller
+            show: externalShutdownPresent
+        }
+        MbItemText
+        {
+            text: qsTr("<b>NOTE:</b> Shutdown pin is GPIO #16 (pin36)\n Take low to shutdown")
+            wrapMode: Text.WordWrap
+            horizontalAlignment: Text.AlignLeft
+            show: externalShutdownPresent
         }
         MbOK
         {
