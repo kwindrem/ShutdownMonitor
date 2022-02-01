@@ -8,6 +8,10 @@ A submenu is used to alert the user that a power cycle is needed to restart the 
 Note that Cerbo restarts itself after a shutdown so this addition may not be useful
 in all situations.
 
+For Raspberry PI platforms, pulling GPIO #16 (pin 36 on the header) low for 2 seconds
+	will also trigger a shutdown if enabled in the Shutdown menu
+	RpiGpioSetup v3.4 or later is also required to activate the GPIO pin
+
 Setup:
 
 The easiest way to install this or other of my packages is to first install SetupHelper,
