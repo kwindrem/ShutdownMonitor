@@ -1,19 +1,14 @@
 #!/bin/bash
 
-# TODO: add Setting to allow GPIO to trigger shutdown
-#			needs enable so false triggers won't shutdown accidentially
-#			RPI only - needs RpiGpioSetup also
+
+# This modificaiton adds support for an external transfer switch ahead of the
+# MultiPlus inverter/charger AC input so that both grid and generator may be used
+# Quattros provide a second AC input and internal switching between them
+# A Multi only has one AC input so grid/generator switching must occur
+# up stream of the Multi's AC input
 #
 
-
-# setup Shurdown Monitor mechanism
-# Venus OS provides a restart command but not a shutdown command
-# This modificaiton adds a shutdown command to the Device List / Settings / General menu
-
-# Venus files that need to be updated to activeate this package
-qmlDir=/opt/victronenergy/gui/qml
-
-packageLogFile="/var/log/ShutdownMonitor/current"
+packageLogFile="/var/log/ExtTransferSwitch/current"
 
 #### following lines incorporate SetupHelper utilities into this script
 # Refer to the SetupHelper ReadMe file for details.
@@ -25,8 +20,11 @@ source "/data/SetupHelper/CommonResources"
 #### running manually and OK to proceed - prompt for input
 if [ $scriptAction == 'NONE' ] ; then
     echo
-    echo "The Shutdown Monitor adds a shutdown command"
-    echo " to the Settings / General menu"
+    echo "The MultiTransferSwitch switches AC input parameters"
+	echo "  between grid (shore) and generator"
+	echo "Separte input source type and AC Input Current Limits are stored for each input"
+	echo "A digital input tells this service which input is currently active"
+	echo "The service then switches the AC 1 input between the two stored values"
     echo
     standardActionPrompt
 fi
@@ -34,10 +32,12 @@ fi
 #### here to do the actual work
 
 if [ $scriptAction == 'INSTALL' ] ; then
-    logMessage "++ Installing ShutdownMonitor"
+    logMessage "++ Installing ExtTransferSwitch"
 
-    updateActiveFile "$qmlDir/PageSettingsGeneral.qml"
-    updateActiveFile "$qmlDir/PageSettingsShutdown.qml"
+    updateActiveFile "/opt/victronenergy/gui/qml/PageDigitalInput.qml"
+    updateActiveFile "/opt/victronenergy/gui/qml/MbItemDigitalInput.qml"
+    updateActiveFile "/opt/victronenergy/dbus-digitalinputs/dbus_digitalinputs.py"
+    updateActiveFile "/opt/victronenergy/dbus-modbustcp/attributes.csv"
 
     installService $packageName
 
@@ -49,10 +49,13 @@ fi
 # #### uninstalling - check scriptAction again
 # if an install step failed package needs to be removed
 if [ $scriptAction == 'UNINSTALL' ] ; then
-    logMessage "++ Uninstalling ShutdownMonitor"
+    logMessage "++ Uninstalling ExtTransferSwitch"
 
-    restoreActiveFile "$qmlDir/PageSettingsGeneral.qml"
-    restoreActiveFile "$qmlDir/PageSettingsShutdown.qml"
+	restoreActiveFile "/opt/victronenergy/gui/qml/PageDigitalInput.qml"
+	restoreActiveFile "/opt/victronenergy/gui/qml/MbItemDigitalInput.qml"
+	restoreActiveFile "/opt/victronenergy/dbus-digitalinputs/dbus_digitalinputs.py"
+	restoreActiveFile "/opt/victronenergy/dbus-modbustcp/attributes.csv"
+
     removeService $packageName
 fi
 

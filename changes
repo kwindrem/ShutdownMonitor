@@ -1,10 +1,2 @@
-v2.2:
-	added v2.80 - no functional changes
-
-v2.1:
-	added description of the GPIO pin for external shutdown of a Raspberry PI
-	no functional changes
-
-v2.0:
-	add GPIO shutdown pin - requires RpiGpioSetup v3.4 or later and only works on Raspberry PI 2/3/4
-	add support for SetupHelper v4
+v1.0:
+	initial release

@@ -1,4 +1,4 @@
 #!/bin/sh
 exec 2>&1
-exec /data/ShutdownMonitor/ShutdownMonitor.py
+exec /data/ExtTransferSwitch/ExtTransferSwitch.py
 

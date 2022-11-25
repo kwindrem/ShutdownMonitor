@@ -1,16 +1,33 @@
-This software installs a clean shutdown to the Venus OS menu system.
-The ShutdownMonitor runs as a service and creates a dbus service with a single
-paramter: /Shutdown. Setting /Shutdown to 1 will trigger a clean OS shutdown.
+This software interfaces an external transfer switch ahead of a MultiPlus AC input
 
-A shutdown submenu is added to the Settings / General menu.
-A submenu is used to alert the user that a power cycle is needed to restart the GX device.
+A GX device digital input is connected to the external transfer switch to indicate
+	if the grid or generator is routed to the Multi's AC input
+	This service then makes changed to the AC input current limit and AC source(type)
+	grid/shore or generator
 
-Note that Cerbo restarts itself after a shutdown so this addition may not be useful
-in all situations.
+Two input types are reserved for a grid connection: grid or shore.
+	This selection is stored so that that specific selection is restored when
+	switching back from generator
 
-For Raspberry PI platforms, pulling GPIO #16 (pin 36 on the header) low for 2 seconds
-	will also trigger a shutdown if enabled in the Shutdown menu
-	RpiGpioSetup v3.4 or later is also required to activate the GPIO pin
+In addition, the AC input current limit is saved when on both generator and grid
+	so that value can also be restored.
+
+Separate grid and generator input current limits are needed for a tidy transition
+	between grid and generator.
+	These are stored in dbus
+		/Settings/TransferSwitch/GridCurrentLimit
+		/Settings/TransferSwitch/GeneratorCurrentLimit
+
+When the transfer switch is set to grid, ...GridCurrentLimit is updated when
+	updating the AC input current limit through the normal mechanisms (various places in the GUI).
+	Likewise, ...GeneratorCurrentLimit is updated when the transfer switch is set to generator.
+
+A new digital input type "External transfer switch" allows the external transfer switch to
+	communicate with the this software.
+	This input should be connected to an isolated contact on the transfer switch that closes
+	when the transfer switch is in the generator position.
+	The logic can be inverted if the contact closes when on grid.
+	The invert control is located in the device list under the transfer switch device
 
 Setup:
 
