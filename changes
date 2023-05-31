@@ -1,3 +1,6 @@
+v2.5:
+	add support for v3.00 - no functional changes
+
 v2.4:
 	fixed: Shutdown menu buttons not being hidden properly
 
