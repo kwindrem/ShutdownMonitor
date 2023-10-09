@@ -40,10 +40,6 @@ if [ $scriptAction == 'INSTALL' ] ; then
     updateActiveFile "$qmlDir/PageSettingsShutdown.qml"
 
     installService $packageName
-
-    if $filesUpdated ; then
-        restartGui=true
-    fi
 fi
 
 # #### uninstalling - check scriptAction again

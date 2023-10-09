@@ -26,7 +26,8 @@ except ImportError:
 	import gobject as GLib # for Python 2
 
 # add the path to our own packages for import
-sys.path.insert(1, os.path.join(os.path.dirname(__file__), 'ext', 'velib_python'))
+# use an established Victron service to maintain compatiblity
+sys.path.insert(1, os.path.join('/opt/victronenergy/dbus-systemcalc-py', 'ext', 'velib_python'))
 from vedbus import VeDbusService
 from settingsdevice import SettingsDevice
 

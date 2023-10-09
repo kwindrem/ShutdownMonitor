@@ -9,7 +9,7 @@ MbPage
 	id: root
 	property string bindPrefix: "com.victronenergy.settings"
 
-	model: VisualItemModel {
+	model: VisibleItemModel {
 		MbItemOptions {
 			id: accessLevelSelect
 			description: qsTr("Access level")
