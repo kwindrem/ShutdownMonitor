@@ -25,8 +25,12 @@ will also trigger a shutdown if enabled in the Shutdown menu. This requires
 [RpiGpioSetup](https://github.com/kwindrem/RpiGpioSetup) with Version v3.4 or later to
 activate the GPIO pin.
 
-## Setup
+## Installation
 
-The easiest way to install this or other of my packages is to first install
-[SetupHelper](https://github.com/kwindrem/SetupHelper), then use its package install tool.
-Refer to the SetupHelper ReadMe for instructions.
+ShutdownMonitor requires that SetupHelper is installed first.
+
+The easiest way to install ShutdownMonitor is to do a "blind install" of SetupHelper
+	and then add the ShutdownMonitor package via the PackageManager menus.
+
+Refer to the SetupHelper ReadMe for instructions and for other install options:
+	https://github.com/kwindrem/SetupHelper
