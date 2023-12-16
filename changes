@@ -1,3 +1,6 @@
+v2.8:
+	fixed: bad file sets for v3.11, 3.12 ...
+
 v2.7:
 	add support for v3.12, 3.13, 3.20~33 (others)
 

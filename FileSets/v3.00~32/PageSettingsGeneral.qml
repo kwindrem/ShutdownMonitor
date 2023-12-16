@@ -1,1 +1,1 @@
-../v3.20~8/PageSettingsGeneral.qml
+../v3.20~34/PageSettingsGeneral.qml
