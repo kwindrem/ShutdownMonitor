@@ -1,3 +1,6 @@
+v3.0:
+	add support for SetupHelper v6.0
+
 v2.8:
 	fixed: bad file sets for v3.11, 3.12 ...
 

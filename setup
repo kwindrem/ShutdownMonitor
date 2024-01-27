@@ -1,62 +1,31 @@
 #!/bin/bash
 
-# TODO: add Setting to allow GPIO to trigger shutdown
-#			needs enable so false triggers won't shutdown accidentially
-#			RPI only - needs RpiGpioSetup also
-#
-
-
-# setup Shurdown Monitor mechanism
+# setup Shutdown Monitor mechanism
 # Venus OS provides a restart command but not a shutdown command
 # This modificaiton adds a shutdown command to the Device List / Settings / General menu
+#
+#	for RPI only a GPIO pin can also trigger shutdown
 
-# Venus files that need to be updated to activeate this package
-qmlDir=/opt/victronenergy/gui/qml
+# tell CommonResources to:
+#	prompt for install/uninstall
+#	auto install or auto uninstall
+#	then exit
+#	IncludeHelpers will NOT return here !
 
-packageLogFile="/var/log/ShutdownMonitor/current"
+standardPromptAndActions='yes'
 
-#### following lines incorporate SetupHelper utilities into this script
-# Refer to the SetupHelper ReadMe file for details.
-    
-source "/data/SetupHelper/CommonResources"
-
-#### end of lines to include SetupHelper
-
-#### running manually and OK to proceed - prompt for input
-if [ $scriptAction == 'NONE' ] ; then
-    echo
-    echo "The Shutdown Monitor adds a shutdown command"
-    echo " to the Settings / General menu"
-    echo
-    standardActionPrompt
+#### following lines incorporate helper resources into this script
+pkgDir=$( dirname $0 )
+pkgName=$( basename $pkgDir )
+pkgRoot=$( dirname $pkgDir )
+if [ -e "$pkgDir/HelperResources/IncludeHelpers" ]; then
+	source "$pkgDir/HelperResources/IncludeHelpers"
+elif [ -e "$pkgRoot/SetupHelper/HelperResources/IncludeHelpers" ]; then
+	source "$pkgRoot/SetupHelper/HelperResources/IncludeHelpers"
+else
+	echo "$pkgName: helper files not found - can't continue" | tee -a "/data/log/SetupHelper"
+	exit 1
 fi
-
-#### here to do the actual work
-
-if [ $scriptAction == 'INSTALL' ] ; then
-    logMessage "++ Installing ShutdownMonitor"
-
-    updateActiveFile "$qmlDir/PageSettingsGeneral.qml"
-    updateActiveFile "$qmlDir/PageSettingsShutdown.qml"
-
-    installService $packageName
-fi
-
-# #### uninstalling - check scriptAction again
-# if an install step failed package needs to be removed
-if [ $scriptAction == 'UNINSTALL' ] ; then
-    logMessage "++ Uninstalling ShutdownMonitor"
-
-    restoreActiveFile "$qmlDir/PageSettingsGeneral.qml"
-    restoreActiveFile "$qmlDir/PageSettingsShutdown.qml"
-    removeService $packageName
-fi
-
-if $filesUpdated ; then
-    restartGui=true
-fi
-
-# thats all folks - SCRIPT EXITS INSIDE THE FUNCTION
-endScript
+#### end of lines to include helper resources
 
 
