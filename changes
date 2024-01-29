@@ -1,3 +1,6 @@
+v3.1:
+	bump version to make sure package reinstalls after v6.1 changes
+
 v3.0:
 	add support for SetupHelper v6.0
 
