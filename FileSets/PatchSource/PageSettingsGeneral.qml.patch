@@ -1,0 +1,17 @@
+--- /Users/Kevin/GitHub/ShutdownMonitor.copy/FileSets/PatchSource/PageSettingsGeneral.qml.source	2024-03-22 19:53:04
++++ /Users/Kevin/GitHub/ShutdownMonitor.copy/FileSets/PatchSource/PageSettingsGeneral.qml.edited	2024-03-22 19:48:02
+@@ -89,6 +89,14 @@
+ 				vePlatform.reboot()
+ 			}
+ 		}
++//////// add for Shutdown command
++        MbSubMenu
++        {
++            description: qsTr("Shutdown")
++            subpage: Component { PageSettingsShutdown {} }
++			property VBusItem shutdownItem: VBusItem { bind: Utils.path("com.victronenergy.shutdown", "/Shutdown") }
++            show: shutdownItem.valid
++        }
+ 
+ 		MbSwitch {
+ 			property VBusItem hasBuzzer: VBusItem {bind: "com.victronenergy.system/Buzzer/State"}

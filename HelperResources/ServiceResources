@@ -112,7 +112,7 @@ removeService ()
 			svc -d "/service/$1/log"
 		fi
 
-		# supervise processes hang around after removing the service so save info and kill them after removal
+		# supervise processes may hang around after removing the service so save info and kill them after removal
 		pids=""
 		while read -u 9 line; do
 			read s uid pid ppid vsz rss tty stime time cmd blah <<< "$line"
@@ -135,7 +135,9 @@ removeService ()
 		fi
 
 		# now kill the supervise processes
-		kill $pids
+		if ! [ -z $pids ]; then
+			kill $pids
+		fi
     fi
 
 	# remove service from installed services list
@@ -264,8 +266,13 @@ installService ()
 				fi
             fi
 			if serviceIsUp $serviceName ; then
-				logMessage "restarting $serviceName service"
-				svc -t "/service/$serviceName"
+				if $runFromPm && [ $serviceName == 'PackageManager' ]; then
+					logMessage "$serviceName restart deferred until GUI restart"
+					restartGui=true
+				else
+					logMessage "restarting $serviceName service"
+					svc -t "/service/$serviceName"
+				fi
 			fi
         fi
 		# log needs to be handled separtely including a restart
