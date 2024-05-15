@@ -1,17 +1,18 @@
---- /Users/Kevin/GitHub/ShutdownMonitor.copy/FileSets/PatchSource/PageSettingsGeneral.qml.orig	2024-03-22 19:53:04
-+++ /Users/Kevin/GitHub/ShutdownMonitor.copy/FileSets/PatchSource/PageSettingsGeneral.qml	2024-03-22 19:48:02
-@@ -89,6 +89,14 @@
- 				vePlatform.reboot()
+--- /Users/Kevin/GitHub/ShutdownMonitor.copy/FileSets/PatchSource/PageSettingsGeneral.qml.orig	2024-04-22 04:01:13
++++ /Users/Kevin/GitHub/ShutdownMonitor.copy/FileSets/PatchSource/PageSettingsGeneral.qml	2024-05-02 17:23:48
+@@ -90,6 +90,15 @@
  			}
  		}
-+//////// add for Shutdown command
-+        MbSubMenu
-+        {
-+            description: qsTr("Shutdown")
-+            subpage: Component { PageSettingsShutdown {} }
-+			property VBusItem shutdownItem: VBusItem { bind: Utils.path("com.victronenergy.shutdown", "/Shutdown") }
-+            show: shutdownItem.valid
-+        }
  
++//////// add for Shutdown command
++		MbSubMenu
++		{
++			description: qsTr("Shutdown")
++			subpage: Component { PageSettingsShutdown {} }
++			property VBusItem shutdownItem: VBusItem { bind: Utils.path("com.victronenergy.shutdown", "/Shutdown") }
++			show: shutdownItem.valid
++		}
++
  		MbSwitch {
  			property VBusItem hasBuzzer: VBusItem {bind: "com.victronenergy.system/Buzzer/State"}
+ 			name: qsTr("Audible alarm")

@@ -97,6 +97,12 @@ MbPage
 			show: hasBuzzer.valid
 		}
 
+		MbSwitch {
+			name: qsTr("Enable status LEDs")
+			bind: Utils.path(bindPrefix, "/Settings/LEDs/Enable")
+			show: item.valid
+		}
+
 		MbItemOptions {
 			id: demoOnOff
 			description: qsTr("Demo mode")

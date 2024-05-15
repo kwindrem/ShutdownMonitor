@@ -89,20 +89,27 @@ MbPage
 				vePlatform.reboot()
 			}
 		}
+
 //////// add for Shutdown command
-        MbSubMenu
-        {
-            description: qsTr("Shutdown")
-            subpage: Component { PageSettingsShutdown {} }
+		MbSubMenu
+		{
+			description: qsTr("Shutdown")
+			subpage: Component { PageSettingsShutdown {} }
 			property VBusItem shutdownItem: VBusItem { bind: Utils.path("com.victronenergy.shutdown", "/Shutdown") }
-            show: shutdownItem.valid
-        }
+			show: shutdownItem.valid
+		}
 
 		MbSwitch {
 			property VBusItem hasBuzzer: VBusItem {bind: "com.victronenergy.system/Buzzer/State"}
 			name: qsTr("Audible alarm")
 			bind: Utils.path(bindPrefix, "/Settings/Alarm/Audible")
 			show: hasBuzzer.valid
+		}
+
+		MbSwitch {
+			name: qsTr("Enable status LEDs")
+			bind: Utils.path(bindPrefix, "/Settings/LEDs/Enable")
+			show: item.valid
 		}
 
 		MbItemOptions {
