@@ -1,3 +1,6 @@
+v3.4: (pending)
+	use velib_python to the one in SetupHelper (if it exists)
+
 v3.3:
 	remove local copy of HelperResources
 
