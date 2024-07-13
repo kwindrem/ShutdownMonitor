@@ -1,4 +1,4 @@
-v3.4: (pending)
+v3.5:
 	use velib_python to the one in SetupHelper (if it exists)
 
 v3.3:
