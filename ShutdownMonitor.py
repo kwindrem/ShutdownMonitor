@@ -18,113 +18,11 @@ import os
 import time
 import re
 import dbus
-
-# accommodate both Python 2 and 3
-# if the Python 3 GLib import fails, import the Python 2 gobject
-try:
-	from gi.repository import GLib # for Python 3
-except ImportError:
-	import gobject as GLib # for Python 2
-
-# convert a version string to an integer to make comparisions easier
-# refer to PackageManager.py for full description
-
-def VersionToNumber (version):
-	version = version.replace ("large","L")
-	numberParts = re.split ('\D+', version)
-	otherParts = re.split ('\d+', version)
-	# discard blank elements
-	#	this can happen if the version string starts with alpha characters (like "v")
-	# 	of if there are no numeric digits in the version string
-	try:
-		while numberParts [0] == "":
-			numberParts.pop(0)
-	except:
-		pass
-
-	numberPartsLength = len (numberParts)
-
-	if numberPartsLength == 0:
-		return 0
-	versionNumber = 0
-	releaseType='release'
-	if numberPartsLength >= 2:
-		if 'b' in otherParts or '~' in otherParts:
-			releaseType = 'beta'
-			versionNumber += 60000
-		elif 'a' in otherParts:
-			releaseType = 'alpha'
-			versionNumber += 30000
-		elif 'd' in otherParts:
-			releaseType = 'develop'
-
-	# if release all parts contribute to the main version number
-	#	and offset is greater than all prerelease versions
-	if releaseType == 'release':
-		versionNumber += 90000
-	# if pre-release, last part will be the pre release part
-	#	and others part will be part the main version number
-	else:
-		numberPartsLength -= 1
-		versionNumber += int (numberParts [numberPartsLength])
-
-	# include core version number
-	versionNumber += int (numberParts [0]) * 10000000000000
-	if numberPartsLength >= 2:
-		versionNumber += int (numberParts [1]) * 1000000000
-	if numberPartsLength >= 3:
-		versionNumber += int (numberParts [2]) * 100000
-
-	return versionNumber
-
-
-# get venus version
-versionFile = "/opt/victronenergy/version"
-try:
-	file = open (versionFile, 'r')
-except:
-	VenusVersion = ""
-	VenusVersionNumber = 0
-else:
-	VenusVersion = file.readline().strip()
-	VenusVersionNumber = VersionToNumber (VenusVersion)
-	file.close()
-
+from gi.repository import GLib
 # add the path to our own packages for import
-# use an established Victron service to maintain compatiblity
-setupHelperVeLibPath = "/data/SetupHelper/velib_python"
-veLibPath = ""
-if os.path.exists ( setupHelperVeLibPath ):
-	for libVersion in os.listdir ( setupHelperVeLibPath ):
-		# use 'latest' for newest versions even if not specifically checked against this verison when created
-		if libVersion == "latest":
-			newestVersionNumber = VersionToNumber ( "v9999.9999.9999" )
-		else:
-			newestVersionNumber = VersionToNumber ( libVersion )
-		oldestVersionPath = os.path.join (setupHelperVeLibPath, libVersion, "oldestVersion" )
-		if os.path.exists ( oldestVersionPath ):
-			try:
-				fd = open (oldestVersionPath, 'r')
-				oldestVersionNumber = VersionToNumber ( fd.readline().strip () )
-				fd.close()
-			except:
-				oldestVersionNumber = 0
-		else:
-			oldestVersionNumber = 0
-		if VenusVersionNumber >= oldestVersionNumber and VenusVersionNumber <= newestVersionNumber:
-			veLibPath = os.path.join (setupHelperVeLibPath, libVersion)
-			break
-
-# no SetupHelper velib - use one in systemcalc
-if veLibPath == "":
-	veLibPath = os.path.join('/opt/victronenergy/dbus-systemcalc-py', 'ext', 'velib_python')
-
-logging.warning ("using " + veLibPath + " for velib_python")
-sys.path.insert(1, veLibPath)
-
+sys.path.insert(1, "/data/SetupHelper/velib_python")
 from vedbus import VeDbusService
 from settingsdevice import SettingsDevice
-
 
 ShutdownServiceName = 'com.victronenergy.shutdown'
 
